@@ -6,13 +6,13 @@ namespace Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        [Header("Movement")]
+        [Header("- Movement -")]
         [SerializeField]
         private MovementSettings currentMovementScriptable;
         [SerializeField]
         private PlayerInput playerInput;
 
-        [Header("Components")]
+        [Header("- Components -")]
         [SerializeField]
         private Rigidbody rb;
 

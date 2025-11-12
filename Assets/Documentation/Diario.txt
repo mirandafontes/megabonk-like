@@ -1,0 +1,61 @@
+Paulo Ricardo
+Megabonk-like
+
+Resolvi utilizar esse txt como um diário do desenvolvimento para
+o game. 
+
+Espero atualizar isso ao inicio e final de cada dia de desenvolvimento.
+
+11/11/2025
+
+Conforme expliquei anteriormente ao Alefe, estou com a semana muito aterafada.
+Por consequência, muito da capacidade e disponibilidade técnica está "afetada"
+para a realização do teste.
+
+Entretanto, farei da mesma maneira o teste técnico, ciente dessas limitações.
+
+Solicitei um prazo contando a partir do dia 11/11 (terça-feira) até 18/11.
+Deixei disponível para ele também um antigo teste técnico que fiz:
+
+https://github.com/mirandafontes/Paulo-Ricardo-LIGA
+
+Onde encontra-se o README e um diário.
+
+Estou evitando utilizar qualquer framework ou pacote.
+Os únicos pacotes que irei utilizar são os da própria Unity.
+
+Busco a simplicidade no código em detrimento ao over-engineering.
+
+Ao contrário do teste técnico anterior, este possui requisitos mais específicos
+e um jogo com temática já presentes.
+
+Inicialmente, defini um cenário qualquer e quis delimitar inicialmente o sistema de movimentação
+do jogador.
+
+Utilizei a física do próprio Unity, com rigidbody e um sistema de cinemachine
+para garantir que a câmera siga o jogador.
+
+Defini um scriptable responsável por conter as configurações de movimento do jogador,
+o que será útil para criar outras modalidades de movimento
+(além de ser possível de utilizar nos inimigos).
+
+Existem algumas ideias já definidas em minha mente,
+como o uso de classes POCO para cuidar dos inimigos e das waves.
+Scriptables para descrição das curvas de spawn e similares.
+Object-pool feito na própria cena (trocando o tempo de instância por um tempo de loading da scene)
+
+Acredito que ao longo dos dias, se tornem concretas.
+
+Gostaria de implementar o multijogador em C# cru com o DarkRift
+(pois incrivelmente é mais prático e rápido de trabalhar que o PhotoNetwork)
+mas vai depender da disponibilidade e avanço do projeto.
+
+O que foi feito hoje (noite):
+- Arena dummy
+- PlayerMovement
+- Scriptable para configuração do movimento do jogador
+- Cinemachine para câmera
+- Movimentação utilizando o InputActions da Unity (o que permitiria um segundo jogador)
+
+Eventualmente, com a repetição de algumas lógicas, podemos extrair 
+as interfaces.

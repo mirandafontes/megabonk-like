@@ -51,14 +51,33 @@ namespace Enemy
             gameObject.SetActive(false);
         }
 
+        public void ApplyMovement(Vector3 targetPosition, bool isAvoiding)
+        {
+            CurrentData.IsAvoiding = isAvoiding;
+
+            Vector3 direction = targetPosition;
+            CurrentData.Position += CurrentData.CurrentSpeed * Time.deltaTime * direction;
+
+            transform.position = CurrentData.Position;
+
+            if (direction.sqrMagnitude > 0.01f)
+            {
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(direction),
+                    Time.deltaTime * 10f
+                );
+            }
+        }
+
         private void SetVisual(EnemyType type)
         {
             foreach (var entry in enemyVisuals)
             {
                 bool isActive = entry.Type == type;
-                
+
                 entry.VisualRoot.SetActive(isActive);
-                
+
                 if (isActive)
                 {
                     Debug.Log($"[EnemyController] Activating {type} visual");

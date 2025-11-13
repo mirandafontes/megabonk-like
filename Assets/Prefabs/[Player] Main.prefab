@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 6567115646694453608}
   - component: {fileID: 7245955857979322226}
   - component: {fileID: 1481141036499651414}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: '[Player] Main'
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,9 +119,9 @@ GameObject:
   - component: {fileID: 1442024837642219602}
   - component: {fileID: 8855011533065340790}
   - component: {fileID: 4762719127470148926}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: '[Cube] Body'
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

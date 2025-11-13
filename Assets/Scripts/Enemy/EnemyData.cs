@@ -14,12 +14,13 @@ namespace Enemy
     {
         [SerializeField]
         private EnemyBlueprint blueprint;
-        
+
         public string CurrentName { get; set; }
         public float CurrentHealth { get; set; }
         public float CurrentSpeed { get; set; }
         public Vector3 Position { get; set; }
         public EnemyType EnemyType { get; set; }
+        public bool IsAvoiding { get; set; }
 
         public EnemyData(EnemyBlueprint newBlueprint, Vector3 spawnPosition)
         {
@@ -29,6 +30,7 @@ namespace Enemy
             CurrentHealth = blueprint.BaseHealth;
             CurrentSpeed = blueprint.MovementSettings.MaxSpeed;
             EnemyType = blueprint.EnemyType;
+            IsAvoiding = false;
 
             Position = spawnPosition;
         }
@@ -41,6 +43,7 @@ namespace Enemy
             CurrentHealth = blueprint.BaseHealth;
             CurrentSpeed = blueprint.MovementSettings.MaxSpeed;
             EnemyType = blueprint.EnemyType;
+            IsAvoiding = false;
 
             Position = spawnPosition;
         }

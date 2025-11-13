@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using GenericPool;
+using Pursuit;
 using ScriptableObjects;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Enemy
@@ -10,20 +10,17 @@ namespace Enemy
     {
         public static EnemyManager Instance { get; private set; }
 
-        private List<EnemyController> activeControllers = new List<EnemyController>();
+        private readonly List<EnemyController> activeControllers = new List<EnemyController>();
+        private MonoBehaviourPool<EnemyController> enemyPool;
 
         [Header("- Pool -")]
         [SerializeField] private Transform enemiesParent;
         [SerializeField] private EnemyController enemyPrefab;
         [SerializeField] private int initialPoolSize = 250;
 
-        [Header("- Blueprints - ")]
-        [SerializeField] private List<EnemyBlueprint> availableBlueprints;
-        private MonoBehaviourPool<EnemyController> enemyPool;
-
         [Header("- Scene pool -")]
         [SerializeField] private List<EnemyController> _prePlacedInitialEnemies;
-        [SerializeField] private EnemyBlueprint defaultBlueprint;
+        [SerializeField] private EnemyBlueprint currentBlueprint;
 
         [Header("- Dummy -")]
         [SerializeField] private Transform playerTransform;
@@ -32,6 +29,11 @@ namespace Enemy
         [SerializeField] private float minSpawnRadius = 15f;
         [SerializeField] private float maxSpawnRadius = 25f;
         [SerializeField] private float exclusionAngle = 45f;
+
+        [Header("- Movement algorithm -")]
+        [SerializeField] private PursuitStrategy pursuitScriptable;
+        [SerializeField] private int enemiesPerFrame = 5;
+        private int nextEnemyIndex = 0;
 
         #region Unity
         private void Awake()
@@ -52,33 +54,20 @@ namespace Enemy
                 enemiesParent
             );
 
-            if (_prePlacedInitialEnemies.Count > 0 && defaultBlueprint != null)
+            if (_prePlacedInitialEnemies.Count > 0 && currentBlueprint != null)
             {
                 InitializePrePlacedEnemies();
             }
-
-            //_playerTransform = FindObjectOfType<PlayerController>().transform;
         }
 
         private void Update()
         {
-            if (playerTransform == null)
+            if (playerTransform == null || activeControllers.Count <= 0)
             {
                 return;
             }
 
-            Vector3 playerPos = playerTransform.position;
-
-            for (int i = activeControllers.Count - 1; i >= 0; i--)
-            {
-                EnemyController controller = activeControllers[i];
-                EnemyData enemyData = controller.CurrentData;
-
-                Vector3 direction = (playerPos - enemyData.Position).normalized;
-                enemyData.Position += enemyData.CurrentSpeed * Time.deltaTime * direction;
-
-                controller.transform.position = enemyData.Position;
-            }
+            MoveEnemies();
         }
         #endregion
 
@@ -92,21 +81,14 @@ namespace Enemy
             activeControllers.Add(controller);
         }
 
-        [ContextMenu("Spawn random enemy")]
-        public void SpawnRandomEnemy()
+        public void SpawnNewEnemy(Vector3 spawnPos)
         {
-            if (availableBlueprints == null || availableBlueprints.Count == 0)
-            {
-                Debug.LogError("[EnemyManager] No EnemyBlueprintSO available to spawn.");
-                return;
-            }
+            EnemyController controller = enemyPool.Get();
 
-            int randomIndex = Random.Range(0, availableBlueprints.Count);
-            EnemyBlueprint blueprint = availableBlueprints[randomIndex];
+            int newIndex = activeControllers.Count;
+            controller.InitializeData(currentBlueprint, spawnPos, newIndex);
 
-            Vector3 newSpawn = CalculateSpawnPosition(playerTransform.position);
-
-            SpawnNewEnemy(blueprint, newSpawn);
+            activeControllers.Add(controller);
         }
 
         public void HandleDamage(EnemyController controller, float damage)
@@ -182,7 +164,7 @@ namespace Enemy
 
                 int newIndex = activeControllers.Count;
                 Vector3 spawnPosition = CalculateSpawnPosition(playerTransform.position);
-                controller.InitializeData(defaultBlueprint, spawnPosition, newIndex);
+                controller.InitializeData(currentBlueprint, spawnPosition, newIndex);
 
                 activeControllers.Add(controller);
 
@@ -220,6 +202,41 @@ namespace Enemy
 
             Debug.LogError("[EnemyManager] Spawn position at fallback case");
             return playerPosition + new Vector3(Random.Range(minSpawnRadius, maxSpawnRadius), 0f, 0f);
+        }
+
+        private void MoveEnemies()
+        {
+            Vector3 playerPos = playerTransform.position;
+            int enemiesToProcess = Mathf.Min(enemiesPerFrame, activeControllers.Count);
+
+            //Atualizamos apenas parte dos inimigos em determinado frame
+            //Para dividir a atualização de movimentação ao longo de diversos frames
+            for (int i = 0; i < enemiesToProcess; i++)
+            {
+                int currentIndex = nextEnemyIndex;
+
+                if (currentIndex >= 0 && currentIndex < activeControllers.Count)
+                {
+                    EnemyController controller = activeControllers[currentIndex];
+
+                    //Short-circuit
+                    if (!controller.IsDataValid)
+                    {
+                        break;
+                    }
+
+                    EnemyData enemyData = controller.CurrentData;
+
+                    MovementResult result = pursuitScriptable.GetBehavior().CalculateMovement(
+                        enemyData.Position,
+                        playerPos
+                    );
+
+                    controller.ApplyMovement(result.FinalDirection, result.IsAvoidingObstacle);
+                }
+
+                nextEnemyIndex = (nextEnemyIndex + 1) % activeControllers.Count;
+            }
         }
     }
 }

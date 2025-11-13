@@ -13,6 +13,7 @@ namespace Enemy
         private List<EnemyController> activeControllers = new List<EnemyController>();
 
         [Header("- Pool -")]
+        [SerializeField] private Transform enemiesParent;
         [SerializeField] private EnemyController enemyPrefab;
         [SerializeField] private int initialPoolSize = 250;
 
@@ -26,6 +27,11 @@ namespace Enemy
 
         [Header("- Dummy -")]
         [SerializeField] private Transform playerTransform;
+
+        [Header("- Spawn config -")]
+        [SerializeField] private float minSpawnRadius = 15f;
+        [SerializeField] private float maxSpawnRadius = 25f;
+        [SerializeField] private float exclusionAngle = 45f;
 
         #region Unity
         private void Awake()
@@ -43,10 +49,9 @@ namespace Enemy
                 () => Instantiate(enemyPrefab, this.transform).GetComponent<EnemyController>(),
                 initialPoolSize,
                 true,
-                this.transform
+                enemiesParent
             );
 
-            // 2. Pré-preenche a lista usando a referência do Inspector
             if (_prePlacedInitialEnemies.Count > 0 && defaultBlueprint != null)
             {
                 InitializePrePlacedEnemies();
@@ -87,7 +92,8 @@ namespace Enemy
             activeControllers.Add(controller);
         }
 
-        public void SpawnRandomEnemy(Vector3 spawnPos)
+        [ContextMenu("Spawn random enemy")]
+        public void SpawnRandomEnemy()
         {
             if (availableBlueprints == null || availableBlueprints.Count == 0)
             {
@@ -98,7 +104,9 @@ namespace Enemy
             int randomIndex = Random.Range(0, availableBlueprints.Count);
             EnemyBlueprint blueprint = availableBlueprints[randomIndex];
 
-            SpawnNewEnemy(blueprint, spawnPos);
+            Vector3 newSpawn = CalculateSpawnPosition(playerTransform.position);
+
+            SpawnNewEnemy(blueprint, newSpawn);
         }
 
         public void HandleDamage(EnemyController controller, float damage)
@@ -115,6 +123,21 @@ namespace Enemy
             {
                 KillAndReturn(controller);
             }
+        }
+
+        [ContextMenu("Kill random enemy")]
+        public void KillRandomEnemy()
+        {
+            if (activeControllers.Count == 0)
+            {
+                Debug.Log("[EnemyManger] No active enemies to kill.");
+                return;
+            }
+
+            int randomIndex = Random.Range(0, activeControllers.Count);
+            EnemyController controllerToKill = activeControllers[randomIndex];
+
+            KillAndReturn(controllerToKill);
         }
 
         private void KillAndReturn(EnemyController controller)
@@ -158,12 +181,45 @@ namespace Enemy
                 }
 
                 int newIndex = activeControllers.Count;
-                controller.InitializeData(defaultBlueprint, controller.transform.position, newIndex);
+                Vector3 spawnPosition = CalculateSpawnPosition(playerTransform.position);
+                controller.InitializeData(defaultBlueprint, spawnPosition, newIndex);
 
                 activeControllers.Add(controller);
 
                 controller.gameObject.SetActive(true);
             }
+        }
+
+        private Vector3 CalculateSpawnPosition(Vector3 playerPosition)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                float distance = Random.Range(minSpawnRadius, maxSpawnRadius);
+                float angle = Random.Range(0f, 360f);
+
+                float x = Mathf.Cos(angle * Mathf.Deg2Rad) * distance;
+                float z = Mathf.Sin(angle * Mathf.Deg2Rad) * distance;
+
+                Vector3 potentialPosition = playerPosition + new Vector3(x, 0f, z);
+
+                if (exclusionAngle > 0)
+                {
+                    Vector3 spawnDirection = (potentialPosition - playerPosition).normalized;
+                    Vector3 playerForward = playerTransform.forward;
+
+                    float currentAngle = Vector3.Angle(playerForward, spawnDirection);
+
+                    if (currentAngle < exclusionAngle / 2f)
+                    {
+                        continue;
+                    }
+                }
+
+                return potentialPosition;
+            }
+
+            Debug.LogError("[EnemyManager] Spawn position at fallback case");
+            return playerPosition + new Vector3(Random.Range(minSpawnRadius, maxSpawnRadius), 0f, 0f);
         }
     }
 }

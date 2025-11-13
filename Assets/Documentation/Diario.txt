@@ -6,7 +6,7 @@ o game.
 
 Espero atualizar isso ao inicio e final de cada dia de desenvolvimento.
 
-11/11/2025
+11/11/2025 (Noite)
 
 Conforme expliquei anteriormente ao Alefe, estou com a semana muito aterafada.
 Por consequência, muito da capacidade e disponibilidade técnica está "afetada"
@@ -59,3 +59,54 @@ O que foi feito hoje (noite):
 
 Eventualmente, com a repetição de algumas lógicas, podemos extrair 
 as interfaces.
+
+12/11/2025 (tarde)
+
+Fiz hoje o básico de um enemy manager.
+Além disso, criei um Object Pool Generic e uma classe derivada para o MonoBehaviour.
+
+Estive pensando em adicionar um mini-console C# (similar ao de navegador) para me ajudar a debbugar e adicionar umas funcionalidades
+que seria parte correspondente ao requisito de facilitar os testes dos game designers.
+
+Isso seria facilmente feito adicionando o C# Roslyn no projeto e criando um facade para transformar o compilador
+em um interpretador em tempo-real na engine. Mas ai é bônus apenas.
+
+Utilizei o Swap-and-Pop para otimizar a busca e uso da lista de objetos no EnemyManager, evitando métodos custosos
+do LINQ. Salvando o index que representa determinado EnemyController na pool.
+
+Utilizei POCO para presentar os dados atuais do inimigo.
+Pretendo utilizar o Design Pattern State para abstrair o comportamento dos inimigos.
+
+O que foi feito hoje (tarde):
+- Generic Object Pool, com IPoolable e um MonoBehaviourPool
+- Scripts do Enemy
+    - Scriptable para atuar como design Pattern Prototype (blueprint dos inimigos)
+    - EnemyData contém todas as informações em POCO do inimigo (extraídas por meio do blueprint). Representa o estado atual do inimigo.
+    - EnemyController é a ponte MonoBehaviour que vai conter todas as referências aos componentes da Unity. Vai utilizar classes POCO para gerenciar comportamento.
+    - EnemyType é um enum contendo os tipos de inimigos. Serve atualmente apenas para uma diferenciação mais adequada no scriptable.
+    O ideal seria remover, pois assim, a adição de inimigos novos depende de recompilar o código, invés de adicionar apenas mais conteúdo em
+    um possível sistema de Addressables, mas enfim.
+
+Pretendo construir o controlador de spawn utilizando animation curves para definir as curvas
+de spawn dos inimigos.
+
+(noite)
+Vim adaptar os scripts para testar o EnemyController e EnemyManager.
+Quero testar se o visual se alterna de maneira adequada e se o EnemyManager gerencia corretamente a pool.
+
+Infelizmente o maior desgosto da noite está sendo o enum com o tipo de inimigo.
+Ao mesmo tempo que gostaria de removê-lo, pois isso dificulta a adição de conteúdo,
+preciso de algo mais consistente que uma string para uma "cola" mínima.
+
+O ideal seria realizar um mapping utilizando um scriptable para isso. O mapping seria também o id do addressable,
+o que tornaria tudo identificável por um id único e consistente para todo o processo, mas enfim.
+
+Adicionei uns ContextMenu.
+O ideal seria realizar um script e rodar junto com o TestRunner, criando uma série de testes unitários.
+
+Ou, ainda, criar um script MonoBehaviour terceiro responsável contendo uma UI inteira para testar e alterar os parametros.
+Esse script seria utilizado por devs e game designers no geral.
+
+Algo legal da estrutura que criei é que é possível ter EnemyManagers especializados em um único tipo de inimigo.
+Ou seja, podemos um EnemyManager que dê spawn apenas de esqueletos, ou de harpia, ou de tudo misturado.
+Divide-To-Conquer.

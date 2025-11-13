@@ -110,3 +110,22 @@ Esse script seria utilizado por devs e game designers no geral.
 Algo legal da estrutura que criei é que é possível ter EnemyManagers especializados em um único tipo de inimigo.
 Ou seja, podemos um EnemyManager que dê spawn apenas de esqueletos, ou de harpia, ou de tudo misturado.
 Divide-To-Conquer.
+
+13/11/2025 (manhã)
+
+Vou implementar um pequeno Strategy Pattern para a movimentação, "limpando" o EnemyManager dessa responsabilidade direta.
+Isso vai permitir que cada EnemyManager tenha um modo de movimentação para seus inimigos no futuro.
+O script atual de movimentação será um simples de perseguição direta ao usuário, evitando alguns obstáculos.
+
+Além disso, vou dividir o cálculo da atualização da movimentação dos inimigos ao longo dos frames.
+
+Utilizei ScriptableObjects para separar ainda mais o comportamento. Um strategy pattern completo, com opções
+para configuração diretamente no inspetor.
+
+(tarde)
+
+Levei mais um pouco de tempo pela tarde para adaptar o sistema de movimentação nesse design.
+Fiz algumas pequenas otimizações ao utilizar layermask e tags para garantir a movimentação dos inimigos e evitar obstáculos.
+
+Pretendo atacar de noite o WaveSpawn, para criar uma lógica de curvas de spawn.
+Além disso, revisar alguams configurações de build e do compiler do Unity, buscando mais performance.

@@ -1,6 +1,5 @@
 
 using UnityEngine;
-using Enemy;
 
 namespace Pursuit
 {

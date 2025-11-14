@@ -1,0 +1,117 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 206009e7e0c4e8f4c9bd8166d67f7d05, type: 3}
+  m_Name: Low Waves
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.WavesScriptable
+  Waves:
+  - Groups:
+    - WhichEnemy: 0
+      MaxEnemyCount: 5
+      SpawnDelay: 0
+      SpawnOverTime:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 4
+          outSlope: 4
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.25
+          value: 1
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.03599912
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.75
+          value: 0
+          inSlope: -1
+          outSlope: -1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        m_PreInfinity: 1
+        m_PostInfinity: 1
+        m_RotationOrder: 4
+      PursuitStrategy: {fileID: 11400000, guid: f4d1cc9391b42474b942498126e33bec, type: 2}
+    CooldownTime: 10
+    InitalTimeBeforeSpawn: 10
+    MaxEnemies: 10
+    TotalTime: 50
+  - Groups:
+    - WhichEnemy: 1
+      MaxEnemyCount: 5
+      SpawnDelay: 0
+      SpawnOverTime:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 4
+          outSlope: 4
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 0.25
+          value: 1
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.03599912
+          outWeight: 0
+        - serializedVersion: 3
+          time: 0.75
+          value: 0
+          inSlope: -1
+          outSlope: -1
+          tangentMode: 34
+          weightedMode: 0
+          inWeight: 0.33333334
+          outWeight: 0.33333334
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: Infinity
+          outSlope: Infinity
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0.33333334
+        m_PreInfinity: 1
+        m_PostInfinity: 1
+        m_RotationOrder: 4
+      PursuitStrategy: {fileID: 11400000, guid: f4d1cc9391b42474b942498126e33bec, type: 2}
+    CooldownTime: 10
+    InitalTimeBeforeSpawn: 10
+    MaxEnemies: 10
+    TotalTime: 50

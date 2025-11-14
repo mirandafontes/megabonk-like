@@ -12,11 +12,13 @@ namespace ScriptableObjects
 
         [Header("- Movement -")]
         public MovementSettings MovementSettings;
+        public PursuitStrategy PursuitStrategy;
 
         [Header("- Stats Base -")]
         [Range(1f, 100f)]
         public float BaseHealth = 10.0f;
         [Range(1f, 10f)]
         public float BaseDamage = 1.0f;
+        
     }
 }

@@ -74,5 +74,36 @@ namespace GenericPool
             obj.OnReturnToPool();
             availableObjects.Enqueue(obj);
         }
+
+        public void AddExistingItemsToPool(List<T> items)
+        {
+            if (items == null || items.Count == 0)
+            {
+                return;
+            }
+
+            foreach (T obj in items)
+            {
+                if (obj == null)
+                {
+                    continue;
+                }
+
+                if (availableObjects.Contains(obj))
+                {
+                    Debug.LogWarning($"[MonobehaviourPool] {obj.name} was already on the pool waiting list and wasn't re-added.");
+                    continue;
+                }
+
+                obj.gameObject.SetActive(false);
+                obj.transform.SetParent(parent);
+
+                obj.OnReturnToPool();
+
+                availableObjects.Enqueue(obj);
+            }
+
+            InitialSize += items.Count;
+        }
     }
 }

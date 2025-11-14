@@ -137,3 +137,39 @@ de animation curves para definir o peso dos inimigos.
 
 Revisei novamente o EnemyManager, retirando algumas lógicas e refatorando.
 Retirei a lógica de arrumar uma posição para spawn, criando uma classe em específico (ISpawner e derivados).
+
+Pretendo amanhã realizar uma UI básica para começar o jogo e testar o WaveManager, Spawner e sistemas similares.
+
+14/11/2025 (manhã)
+
+Antes de realizar as UI, vou configurar a Unity para otimização geral:
+- Build Settings:
+    - Compression Method = LZ4HC
+    - Build utilizando IL2CPP
+    - C++ Compiler Configuration = Master
+    - Stacktrace desativada para warnings e asserts
+    - Diagnostic Data desativado
+    - Lightmap e HDR enconding = Normal quality
+    - Preload Assets = EnemyController (prefab do inimigo)
+
+- Physics Settings:
+    - Otimização da Matrix de colisão
+
+- Quality Settings:
+    - VSync Count = Don't sync
+    - Global MipMap = Half Resolution
+    - Anisotropic Textures = Desabilitado
+
+- Universal Render Pipeline:
+    - Depth-texture = Desativado
+    - Anti-aliasing = Desativado
+    - HDR = Desativado
+    - Shadow Resolution = 1024
+    - Additional Lights -> Per Vertex -> Per Object Limit = 2
+    - Shadows -> Cascade count -> 2
+    - Soft shadows -> Quality -> Medium
+
+- Time:
+    - Aumento do intervalo de atualização do Fixed Update
+
+Além disso, fiz uma rápida refatoração no EnemyManager, encapsulando algumas lógicas em métodos (Clean Code)

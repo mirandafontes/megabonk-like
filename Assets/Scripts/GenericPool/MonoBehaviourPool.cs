@@ -12,6 +12,13 @@ namespace GenericPool
 
         public int InitialSize { get; private set; }
         public bool CanExpand { get; private set; }
+        public int CurrentAvailableCount
+        {
+            get
+            {
+                return availableObjects?.Count ?? 0;
+            }
+        }
 
         public MonoBehaviourPool(Func<T> factory, int initialSize, bool canExpand, Transform parent)
         {
@@ -19,13 +26,6 @@ namespace GenericPool
             InitialSize = initialSize;
             CanExpand = canExpand;
             this.parent = parent;
-
-            for (int i = 0; i < InitialSize; i++)
-            {
-                var obj = this.factory.Invoke();
-                obj.transform.SetParent(this.parent);
-                ReturnToPool(obj);
-            }
         }
 
         public T Get()

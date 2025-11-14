@@ -35,16 +35,17 @@ namespace Enemy
             InitializePool();
             MapEnemyBlueprints();
             PrecacheEnemies();
+            FillPoolToInitialSize();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             if (playerTransform == null || activeControllers.Count <= 0)
             {
                 return;
             }
 
-            MoveEnemies();
+            MoveEnemies(Time.fixedDeltaTime);
         }
         #endregion
 
@@ -132,31 +133,7 @@ namespace Enemy
             activeControllers.RemoveAt(lastIndex);
         }
 
-        private void InitializePrePlacedEnemies()
-        {
-            List<EnemyController> toAddToPool = new List<EnemyController>();
-            EnemyBlueprint skeletonBlueprint = mappedBlueprints[EnemyType.Skeleton];
-
-            foreach (var controller in prePlacedInitialEnemies)
-            {
-                if (controller == null)
-                {
-                    continue;
-                }
-
-                controller.InitializeData(skeletonBlueprint, Vector3.zero, -1);
-
-                controller.gameObject.SetActive(false);
-                controller.transform.SetParent(enemiesParent);
-
-                toAddToPool.Add(controller);
-            }
-
-            enemyPool.AddExistingItemsToPool(toAddToPool);
-            prePlacedInitialEnemies.Clear();
-        }
-
-        private void MoveEnemies()
+        private void MoveEnemies(float deltaTime)
         {
             Vector3 playerPos = playerTransform.position;
             int activeCount = activeControllers.Count;
@@ -173,7 +150,7 @@ namespace Enemy
             {
                 int currentIndex = nextEnemyIndex;
 
-                if (currentIndex >= 0)
+                if (nextEnemyIndex >= activeCount)
                 {
                     nextEnemyIndex = 0;
                     break;
@@ -194,10 +171,9 @@ namespace Enemy
                     playerPos
                 );
 
-                controller.ApplyMovement(result.FinalDirection, result.IsAvoidingObstacle);
+                controller.ApplyMovement(result.FinalDirection, result.IsAvoidingObstacle, deltaTime);
+                nextEnemyIndex++;
             }
-
-            nextEnemyIndex++;
         }
 
         private void InitializePool()
@@ -224,6 +200,47 @@ namespace Enemy
             if (prePlacedInitialEnemies.Count > 0)
             {
                 InitializePrePlacedEnemies();
+            }
+        }
+
+        private void InitializePrePlacedEnemies()
+        {
+            List<EnemyController> toAddToPool = new List<EnemyController>();
+            EnemyBlueprint skeletonBlueprint = mappedBlueprints[EnemyType.Skeleton];
+
+            foreach (var controller in prePlacedInitialEnemies)
+            {
+                if (controller == null)
+                {
+                    continue;
+                }
+
+                controller.InitializeData(skeletonBlueprint, Vector3.zero, -1);
+
+                controller.gameObject.SetActive(false);
+                controller.transform.SetParent(enemiesParent);
+
+                toAddToPool.Add(controller);
+            }
+
+            enemyPool.AddExistingItemsToPool(toAddToPool);
+            prePlacedInitialEnemies.Clear();
+        }
+
+        private void FillPoolToInitialSize()
+        {
+            int currentSize = enemyPool.CurrentAvailableCount + (activeControllers?.Count ?? 0);
+            int objectsToInstantiate = initialPoolSize - currentSize;
+
+            if (objectsToInstantiate <= 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < objectsToInstantiate; i++)
+            {
+                var newObj = Instantiate(enemyPrefab, enemiesParent);
+                enemyPool.ReturnToPool(newObj);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace Enemy
         [Header("- Visual -")]
         [SerializeField] private List<EnemyVisualEntry> enemyVisuals;
 
-        public EnemyData CurrentData { get; private set; }
+        public EnemyData CurrentData;
         public bool IsDataValid { get; private set; }
         //Salvando o index para evitar uso de métodos lineares do LINQ.
         public int Index { get; set; }
@@ -33,6 +33,7 @@ namespace Enemy
                 CurrentData.NewEnemyData(newData, spawnPos);
             }
 
+            transform.position = CurrentData.Position;
             SetVisual(newData.EnemyType);
 
             Index = index;
@@ -51,21 +52,21 @@ namespace Enemy
             gameObject.SetActive(false);
         }
 
-        public void ApplyMovement(Vector3 targetPosition, bool isAvoiding)
+        public void ApplyMovement(Vector3 targetPosition, bool isAvoiding, float deltaTime)
         {
             CurrentData.IsAvoiding = isAvoiding;
 
-            Vector3 direction = targetPosition;
-            CurrentData.Position += CurrentData.CurrentSpeed * Time.deltaTime * direction;
+            Vector3 normalizedDirection = targetPosition.normalized;
+            CurrentData.Position += CurrentData.CurrentSpeed * deltaTime * normalizedDirection;
 
             transform.position = CurrentData.Position;
 
-            if (direction.sqrMagnitude > 0.01f)
+            if (normalizedDirection.sqrMagnitude > 0.01f)
             {
                 transform.rotation = Quaternion.Slerp(
                     transform.rotation,
-                    Quaternion.LookRotation(direction),
-                    Time.deltaTime * 10f
+                    Quaternion.LookRotation(normalizedDirection),
+                    deltaTime * 10
                 );
             }
         }
@@ -77,11 +78,6 @@ namespace Enemy
                 bool isActive = entry.Type == type;
 
                 entry.VisualRoot.SetActive(isActive);
-
-                if (isActive)
-                {
-                    Debug.Log($"[EnemyController] Activating {type} visual");
-                }
             }
         }
 

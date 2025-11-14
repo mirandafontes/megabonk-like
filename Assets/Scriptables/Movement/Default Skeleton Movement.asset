@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0199f84407051a64a883c164fc52f5c0, type: 3}
   m_Name: Default Skeleton Movement
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.MovementVariables
-  MaxSpeed: 20
+  MaxSpeed: 1
   AccelerationForce: 60
   InertiaDamping: 0.1

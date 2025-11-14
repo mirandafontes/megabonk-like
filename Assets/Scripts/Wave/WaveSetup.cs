@@ -46,7 +46,7 @@ namespace Wave
     public class SpawnGroup
     {
         public EnemyType WhichEnemy;
-        [Range(1, 250)]
+        [Range(1, 500)]
         public int MaxEnemyCount = 10;
 
         [Range(01f, 10f)]

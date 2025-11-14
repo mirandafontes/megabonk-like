@@ -26,10 +26,15 @@ namespace Wave
         #region Unity
         private void Awake()
         {
+            //Novamente, poderíamos aplicar uma strategy pattern com uma factory
+            //Ou criar um scriptable object.
+            //Ou, ainda, estipular o algortimo de spawn para cada tipo de monstro.
             spawnPositionGenerator = new CircleSpawn();
         }
+        #endregion
 
-        private void Start()
+        [ContextMenu("Start Game")]
+        public void StartGame()
         {
             if (wavesData != null && enemyManager != null && spawnPositionGenerator != null)
             {
@@ -38,16 +43,16 @@ namespace Wave
             else
             {
                 Debug.LogError("[WaveManager] WaveManager is not configured correctly. Check all dependencies.");
-                enabled = false;
             }
         }
-        #endregion
 
         private IEnumerator WaveCycleCoroutine()
         {
             while (currentWaveIndex < wavesData.Waves.Count)
             {
                 WaveSetup currentWave = wavesData.Waves[currentWaveIndex];
+
+                Debug.Log($"[WaveManager] Waiting {currentWave.InitalTimeBeforeSpawn}s before initial spawn.");
 
                 // Como é variável, não dá para cachear
                 yield return new WaitForSeconds(currentWave.InitalTimeBeforeSpawn);
@@ -134,12 +139,14 @@ namespace Wave
 
             foreach (var tracker in trackers)
             {
-                if (tracker.IsActive)
+                if (!tracker.IsActive)
                 {
-                    if (enemyManager.GetActiveEnemyCount() < setup.MaxEnemies)
-                    {
-                        AttemptSpawn(tracker, currentTimeInWave, setup.TotalTime);
-                    }
+                    continue;
+                }
+
+                if (enemyManager.GetActiveEnemyCount() < setup.MaxEnemies)
+                {
+                    AttemptSpawn(tracker, currentTimeInWave, setup.TotalTime);
                 }
             }
         }

@@ -18,6 +18,9 @@ namespace Player
 
         private Vector2 movementInput;
         private Vector3 currentMovementVector;
+        private Vector3 flatVelocity;
+        private Vector3 oppositeVelocity;
+        private Vector3 tempMovementVector;
 
         #region Unity
         private void Awake()
@@ -28,7 +31,12 @@ namespace Player
 
         private void FixedUpdate()
         {
-            currentMovementVector = new Vector3(movementInput.x, 0f, movementInput.y).normalized;
+            tempMovementVector.x = movementInput.x;
+            tempMovementVector.y = 0f;
+            tempMovementVector.z = movementInput.y;
+
+            currentMovementVector = tempMovementVector.normalized;
+
             if (movementInput.magnitude > 0.1f)
             {
                 rb.AddForce(currentMovementVector * currentMovementScriptable.AccelerationForce, ForceMode.Acceleration);
@@ -36,7 +44,9 @@ namespace Player
             }
             else
             {
-                Vector3 oppositeVelocity = -rb.linearVelocity;
+                oppositeVelocity = rb.linearVelocity;
+                oppositeVelocity.x *= -1f;
+                oppositeVelocity.z *= -1f;
                 oppositeVelocity.y = 0f;
 
                 rb.AddForce(oppositeVelocity * currentMovementScriptable.InertiaDamping, ForceMode.Acceleration);
@@ -75,13 +85,20 @@ namespace Player
 
         private void LimitVelocity()
         {
-            Vector3 flatVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+            flatVelocity.x = rb.linearVelocity.x;
+            flatVelocity.y = 0f;
+            flatVelocity.z = rb.linearVelocity.z;
 
-            if (flatVelocity.magnitude > currentMovementScriptable.MaxSpeed)
+            float magnitude = flatVelocity.magnitude;
+
+            if (magnitude > currentMovementScriptable.MaxSpeed)
             {
-                Vector3 limitedVelocity = flatVelocity.normalized * currentMovementScriptable.MaxSpeed;
+                float ratio = currentMovementScriptable.MaxSpeed / magnitude;
 
-                rb.linearVelocity = new Vector3(limitedVelocity.x, rb.linearVelocity.y, limitedVelocity.z);
+                flatVelocity.x *= ratio;
+                flatVelocity.z *= ratio;
+
+                rb.linearVelocity = new Vector3(flatVelocity.x, rb.linearVelocity.y, flatVelocity.z);
             }
         }
     }

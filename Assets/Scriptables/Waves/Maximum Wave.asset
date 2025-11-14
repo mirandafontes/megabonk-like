@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 206009e7e0c4e8f4c9bd8166d67f7d05, type: 3}
-  m_Name: Low Waves
+  m_Name: Maximum Wave
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.WavesScriptable
   Waves:
   - Groups:
     - WhichEnemy: 0
-      MaxEnemyCount: 5
+      MaxEnemyCount: 500
       SpawnDelay: 0
       SpawnOverTime:
         serializedVersion: 2
@@ -61,55 +61,5 @@ MonoBehaviour:
         m_RotationOrder: 4
     CooldownTime: 10
     InitalTimeBeforeSpawn: 5
-    MaxEnemies: 10
-    TotalTime: 50
-  - Groups:
-    - WhichEnemy: 1
-      MaxEnemyCount: 5
-      SpawnDelay: 0
-      SpawnOverTime:
-        serializedVersion: 2
-        m_Curve:
-        - serializedVersion: 3
-          time: 0
-          value: 0
-          inSlope: 4
-          outSlope: 4
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 0.25
-          value: 1
-          inSlope: Infinity
-          outSlope: Infinity
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0.03599912
-          outWeight: 0
-        - serializedVersion: 3
-          time: 0.75
-          value: 0
-          inSlope: -1
-          outSlope: -1
-          tangentMode: 34
-          weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
-        - serializedVersion: 3
-          time: 1
-          value: 0
-          inSlope: Infinity
-          outSlope: Infinity
-          tangentMode: 0
-          weightedMode: 0
-          inWeight: 0
-          outWeight: 0.33333334
-        m_PreInfinity: 1
-        m_PostInfinity: 1
-        m_RotationOrder: 4
-    CooldownTime: 10
-    InitalTimeBeforeSpawn: 10
-    MaxEnemies: 10
+    MaxEnemies: 500
     TotalTime: 50

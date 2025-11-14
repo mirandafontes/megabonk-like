@@ -129,3 +129,11 @@ Fiz algumas pequenas otimizações ao utilizar layermask e tags para garantir a 
 
 Pretendo atacar de noite o WaveSpawn, para criar uma lógica de curvas de spawn.
 Além disso, revisar alguams configurações de build e do compiler do Unity, buscando mais performance.
+
+(noite)
+
+Estou configurando o sistema do Wave. Vou utilizar um sistema de scriptables para criar as Waves junto com um sistema
+de animation curves para definir o peso dos inimigos.
+
+Revisei novamente o EnemyManager, retirando algumas lógicas e refatorando.
+Retirei a lógica de arrumar uma posição para spawn, criando uma classe em específico (ISpawner e derivados).

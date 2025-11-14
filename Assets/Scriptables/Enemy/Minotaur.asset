@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9ca9506911b6674fa9c344b31aefd46, type: 3}
-  m_Name: Skeleton
+  m_Name: Minotaur
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.EnemyBlueprint
-  EnemyType: 0
-  EnemyName: Skeleton
-  MovementSettings: {fileID: 11400000, guid: e8e90430aef94cf458fd68fae16ca76d, type: 2}
+  EnemyType: 1
+  EnemyName: Minotaur
+  MovementSettings: {fileID: 11400000, guid: 7c2f04bebb359654e83c0a4e9cbca61d, type: 2}
   PursuitStrategy: {fileID: 11400000, guid: f4d1cc9391b42474b942498126e33bec, type: 2}
-  BaseHealth: 10
-  BaseDamage: 1
+  BaseHealth: 20
+  BaseDamage: 5

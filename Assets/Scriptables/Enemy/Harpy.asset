@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9ca9506911b6674fa9c344b31aefd46, type: 3}
-  m_Name: Skeleton
+  m_Name: Harpy
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.EnemyBlueprint
-  EnemyType: 0
-  EnemyName: Skeleton
-  MovementSettings: {fileID: 11400000, guid: e8e90430aef94cf458fd68fae16ca76d, type: 2}
+  EnemyType: 2
+  EnemyName: Harpy
+  MovementSettings: {fileID: 11400000, guid: 283e4387b8bcfb04ebea741f3583c98d, type: 2}
   PursuitStrategy: {fileID: 11400000, guid: f4d1cc9391b42474b942498126e33bec, type: 2}
-  BaseHealth: 10
-  BaseDamage: 1
+  BaseHealth: 5
+  BaseDamage: 5

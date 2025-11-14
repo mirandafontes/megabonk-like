@@ -32,23 +32,9 @@ namespace Enemy
         #region Unity
         private void Awake()
         {
-            enemyPool = new MonoBehaviourPool<EnemyController>(
-                () => Instantiate(enemyPrefab, enemiesParent),
-                initialPoolSize,
-                true,
-                enemiesParent
-            );
-
-            if (prePlacedInitialEnemies.Count > 0)
-            {
-                InitializePrePlacedEnemies();
-            }
-
-            //Mapeando blueprints para acesso mais rápido
-            for (int i = 0; i < blueprints.Count; i++)
-            {
-                mappedBlueprints.TryAdd(blueprints[i].EnemyType, blueprints[i]);
-            }
+            InitializePool();
+            MapEnemyBlueprints();
+            PrecacheEnemies();
         }
 
         private void Update()
@@ -212,6 +198,33 @@ namespace Enemy
             }
 
             nextEnemyIndex++;
+        }
+
+        private void InitializePool()
+        {
+            enemyPool = new MonoBehaviourPool<EnemyController>(
+                () => Instantiate(enemyPrefab, enemiesParent),
+                initialPoolSize,
+                true,
+                enemiesParent
+            );
+        }
+
+        private void MapEnemyBlueprints()
+        {
+            //Mapeando blueprints para acesso mais rápido
+            for (int i = 0; i < blueprints.Count; i++)
+            {
+                mappedBlueprints.TryAdd(blueprints[i].EnemyType, blueprints[i]);
+            }
+        }
+
+        private void PrecacheEnemies()
+        {
+            if (prePlacedInitialEnemies.Count > 0)
+            {
+                InitializePrePlacedEnemies();
+            }
         }
     }
 }

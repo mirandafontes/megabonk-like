@@ -158,9 +158,10 @@ namespace Enemy
 
                 //Short-circuit
                 EnemyController controller = activeControllers[currentIndex];
-                if (!controller.IsDataValid)
+                if (!controller.IsDataValid || controller.IsKnockingBack)
                 {
-                    break;
+                    nextEnemyIndex++;
+                    continue;
                 }
 
                 EnemyData enemyData = controller.CurrentData;

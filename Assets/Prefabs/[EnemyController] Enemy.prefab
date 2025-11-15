@@ -267,6 +267,7 @@ GameObject:
   - component: {fileID: 6492005797502557551}
   - component: {fileID: 6307783361451569426}
   - component: {fileID: 582214087340885288}
+  - component: {fileID: 1858725323131353793}
   m_Layer: 0
   m_Name: '[EnemyController] Enemy'
   m_TagString: Untagged
@@ -303,6 +304,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyController
   rb: {fileID: 582214087340885288}
+  healthComponent: {fileID: 1858725323131353793}
   enemyVisuals:
   - Type: 0
     VisualRoot: {fileID: 8357565946494963157}
@@ -310,6 +312,8 @@ MonoBehaviour:
     VisualRoot: {fileID: 5298039872062006605}
   - Type: 2
     VisualRoot: {fileID: 3943868461264564282}
+  CurrentData:
+    blueprint: {fileID: 0}
 --- !u!54 &582214087340885288
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -337,6 +341,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &1858725323131353793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6772469266684254534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a644fa39dd37b974597a18c1a7d7e8ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Damageable.HealthComponent
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &8357565946494963157
 GameObject:
   m_ObjectHideFlags: 0

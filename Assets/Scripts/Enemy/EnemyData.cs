@@ -21,7 +21,9 @@ namespace Enemy
         public Vector3 Position { get; set; }
         public EnemyType EnemyType { get; set; }
         public bool IsAvoiding { get; set; }
+        public bool IsDying { get; set; }
         public PursuitStrategy PursuitStrategy { get; set; }
+        public bool IsKnockingBack { get; set; }
 
         public EnemyData(EnemyBlueprint newBlueprint, Vector3 spawnPosition)
         {
@@ -33,6 +35,8 @@ namespace Enemy
             EnemyType = blueprint.EnemyType;
             PursuitStrategy = blueprint.PursuitStrategy;
             IsAvoiding = false;
+            IsDying = false;
+            IsKnockingBack = false;
 
             Position = spawnPosition;
         }
@@ -47,6 +51,8 @@ namespace Enemy
             EnemyType = blueprint.EnemyType;
             PursuitStrategy = blueprint.PursuitStrategy;
             IsAvoiding = false;
+            IsDying = false;
+            IsKnockingBack = false;
 
             Position = spawnPosition;
         }

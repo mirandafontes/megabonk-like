@@ -8,9 +8,29 @@ namespace Damageable
         [Header("- Data -")]
         [SerializeField] private float maxHealth = 100f;
         [SerializeField] private float currentHealth;
-        public float CurrentHealth => currentHealth;
+        public float CurrentHealth
+        {
+            get
+            {
+                return currentHealth;
 
-        private Action onHit;
+            }
+
+            set
+            {
+                currentHealth = value;
+            }
+
+        }
+        public float NormalizedHealth
+        {
+            get
+            {
+                return Mathf.Clamp(currentHealth / maxHealth, 0f, 1f);
+            }
+        }
+
+        private Action<float, GameObject> onHit;
         private Action onDeath;
 
         public void Initialize(float maxHealth, float currentHealth)
@@ -19,15 +39,10 @@ namespace Damageable
             this.currentHealth = currentHealth;
         }
 
-        public void BindActions(Action onHit, Action onDeath)
+        public void BindActions(Action<float, GameObject> onHit, Action onDeath)
         {
             this.onHit = onHit;
             this.onDeath = onDeath;
-        }
-
-        public float GetNormalizedHealth()
-        {
-            return Mathf.Clamp(currentHealth / maxHealth, 0f, 1f);
         }
 
         public void TakeDamage(float amount, GameObject instigator)
@@ -37,9 +52,8 @@ namespace Damageable
                 return;
             }
 
-            currentHealth -= amount;
-
-            onHit?.Invoke();
+            //Como o dano é tratado, é passado para as partes
+            onHit?.Invoke(amount, instigator);
 
             if (currentHealth <= 0)
             {

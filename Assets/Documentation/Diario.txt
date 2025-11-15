@@ -173,3 +173,17 @@ Antes de realizar as UI, vou configurar a Unity para otimização geral:
     - Aumento do intervalo de atualização do Fixed Update
 
 Além disso, fiz uma rápida refatoração no EnemyManager, encapsulando algumas lógicas em métodos (Clean Code)
+
+(tarde)
+
+Algo que estive pensando em fazer é um conjunto de ferramentas do editor
+para poder facilitar a criação e adição de inimigos, movimentos, algortimos de perseguição e similares.
+
+E, além disso, novamente recorrer a construção de um script terceiro para manipular os componentes
+Algo como um Swagger, para o game designer.
+
+(noite)
+Meu computador quebrou.
+A 2060 deve ter tomado um curto.
+Por sorte, tinha o repositório remoto no github.
+Estou tentando consertar o computador, e caso dê errado, vou procurar outro para terminar.

@@ -187,3 +187,51 @@ Meu computador quebrou.
 A 2060 deve ter tomado um curto.
 Por sorte, tinha o repositório remoto no github.
 Estou tentando consertar o computador, e caso dê errado, vou procurar outro para terminar.
+
+15/11/2025 (manhã)
+
+Tentei reparar o computador limpando a 2060 com limpa-contato e afins.
+Removi as peças, limpei e coloquei de novo, nada.
+Vou procurar outro computador para terminar o teste.
+
+(tarde)
+Consegui arrumar um computador extra. Após o almoço (13h), voltei a codar.
+Por consequência do prazo e do atraso devido ao computador quebrado, resolvi simplificar algumas concepções que tinha.
+
+Implementei o PlayerStats, que é uma classe POCO para controlar os stats do jogador, subir de nível e atualizar status base.
+Além disso, essa mesma clase é responsável por receber os efeitos de itens, multiplicar pelo valor base e retornar o valor atualizado.
+Atua de maneira similar ao EnemyData, mas com mais funções.
+
+Refatorei o PlayerMovement para utilizar um PlayerStats para obter a velocidade máxima atual do player.
+
+Criei um scriptable para conter AnimationCurves, que seriam utilizadas por game designers para definir uma série de comportamentos.
+Exemplo: exp total acumulada por nível, incremento de valores base do jogador por nível, e similares.
+
+Uma ferramenta do editor para preencher isso de uma maneira mais rápida (principalmente os que tem comportamento linear).
+
+PlayerController atua como classe monobehaviour orquestradora.
+Ela é inicializada antes das outras classes também (modificando o tempo de inicialização dos scripts no Project Settings).
+
+Defini uma interface e um conjunto básicos de scripts para as armas e os itens do jogador.
+Utilizei um design similar ao Strategy Pattern + Scriptable + DI + Abstract class para definir a estrutura das armas e itens.
+(parecido com o utilizado para definir um script de perseguição)
+
+Não utilizei os scriptables das AnimationCurves no sistema de armas pois quero que seja mais explícito ao designer o fine-tuning de cada arma.
+Ao contrário do PlayerStats, que é um crescimento mais linear e centrado.
+(embora seja facilmente conversível os tipos)
+
+O sistema de armas inclui Weapons, Items e WeaponEffect.
+Weapon e IWeaponEffect andam de mãos dadas com o WeaponBlueprint.
+Um WeaponEffect é implementado enquanto POCO e a partir de uma interface IWeaponEffect.
+WeaponBlueprint é o SO concreto de uma arma. WeaponData é a classe POCO com os dados *atuais* da arma.
+WeaponEffect vai para WeaponBlueprint como um scriptable, onde o algortimo de efeito é extraído.
+Vou extrair um WeaponAttack para seguir estratégia similar.
+
+Adicionei o sistema de WeaponAttack.
+Estou utilizando Physics.*NonAlloc para identificar, a partir de um vector3 os inimigos em determinado range
+e aplicar o ataque em cada um deles, por meio da interface IDamageable
+
+Fiz uma adequação na interface, removendo o gameobject de origem da API.
+
+Fiz uma adição do Enemy no LayerMask da Unity, e adicionei como uma das layers para evitar no algortimo de perseguição.
+Com isso, os inimigos também se evitam no algoritmo.

@@ -22,7 +22,7 @@ namespace Wave
         public int MaxEnemies = 50;
 
         [Range(1, 240)]
-        [Tooltip("Seconds")]
+        [Tooltip("Segundos")]
         public int TotalTime;
 
         /// <summary>

@@ -4,12 +4,14 @@ using GenericPool;
 using ScriptableObjects;
 using UnityEngine;
 using Damageable;
+using Pursuit;
 
 namespace Enemy
 {
     /// <summary>
     /// Monobehaviour que atua como ponte entre a Unity e os dados POCO.
     /// Prefab do Enemy.
+    /// Classe orquestradora.
     /// </summary>
     public class EnemyController : MonoBehaviour, IPoolable
     {
@@ -20,7 +22,8 @@ namespace Enemy
         [Header("- Visual -")]
         [SerializeField] private List<EnemyVisualEntry> enemyVisuals;
 
-        public EnemyData CurrentData;
+        [Header("- Data -")]
+        [SerializeField] private EnemyData CurrentData;
         public bool IsDataValid { get; private set; }
         //Salvando o index para evitar uso de métodos lineares do LINQ.
         public int Index { get; set; }
@@ -47,12 +50,38 @@ namespace Enemy
             }
         }
 
+        public Vector3 Position
+        {
+            get
+            {
+                if (CurrentData == null)
+                {
+                    return Vector3.zero;
+                }
+
+                return CurrentData.Position;
+            }
+        }
+
+        public bool IsDying
+        {
+            get
+            {
+                if (CurrentData == null)
+                {
+                    return true;
+                }
+
+                return CurrentData.IsDying;
+            }
+        }
+
         private Coroutine knockbackCoroutine;
 
         #region Unity
         private void Awake()
         {
-            healthComponent.BindActions(OnHit, OnDeath);
+            healthComponent.Initialize(OnHit, OnDeath);
         }
         #endregion
 
@@ -69,7 +98,7 @@ namespace Enemy
 
             transform.position = CurrentData.Position;
             SetVisual(newData.EnemyType);
-            healthComponent.Initialize(CurrentData.CurrentHealth, CurrentData.CurrentHealth);
+            healthComponent.SetHealth(CurrentData.CurrentHealth, CurrentData.CurrentHealth);
 
             Index = index;
             IsDataValid = true;
@@ -111,6 +140,16 @@ namespace Enemy
             }
         }
 
+        public IPursuit GetPursuit()
+        {
+            if (!IsDataValid)
+            {
+                return null;
+            }
+
+            return CurrentData.PursuitStrategy.GetBehavior();
+        }
+
         private void SetVisual(EnemyType type)
         {
             foreach (var entry in enemyVisuals)
@@ -121,13 +160,18 @@ namespace Enemy
             }
         }
 
-        private void OnHit(float amount, GameObject instigator)
+        private void OnHit(float amount)
         {
+            if (CurrentData.IsDying)
+            {
+                return;
+            }
+
             //Aqui podemos aplicar os fx relacionados ao hit
             CurrentData.CurrentHealth -= amount;
             healthComponent.CurrentHealth = CurrentData.CurrentHealth;
 
-            Knockback(instigator);
+            Knockback();
         }
 
         private void OnDeath()
@@ -135,7 +179,7 @@ namespace Enemy
             CurrentData.IsDying = true;
         }
 
-        private void Knockback(GameObject instigator)
+        private void Knockback()
         {
             if (CurrentData.IsDying || CurrentData == null)
             {
@@ -152,7 +196,7 @@ namespace Enemy
 
             float defaultKnockbackForce = 5f;
 
-            Vector3 knockbackDirection = (CurrentData.Position - instigator.transform.position).normalized;
+            Vector3 knockbackDirection = (CurrentData.Position - transform.position).normalized;
             knockbackCoroutine = StartCoroutine(PerformKnockback(knockbackDirection, defaultKnockbackForce));
         }
 

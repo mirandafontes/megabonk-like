@@ -6,15 +6,12 @@ namespace Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        [Header("- Movement -")]
-        [SerializeField]
-        private MovementSettings currentMovementScriptable;
-        [SerializeField]
-        private PlayerInput playerInput;
+        [Header("- Dependencies -")]
+        [SerializeField] private PlayerStats playerStats;
+        [SerializeField] private PlayerInput playerInput;
 
         [Header("- Components -")]
-        [SerializeField]
-        private Rigidbody rb;
+        [SerializeField] private Rigidbody rb;
 
         private Vector2 movementInput;
         private Vector3 currentMovementVector;
@@ -31,6 +28,11 @@ namespace Player
 
         private void FixedUpdate()
         {
+            if (playerStats == null)
+            {
+                return;
+            }
+
             tempMovementVector.x = movementInput.x;
             tempMovementVector.y = 0f;
             tempMovementVector.z = movementInput.y;
@@ -39,7 +41,7 @@ namespace Player
 
             if (movementInput.magnitude > 0.1f)
             {
-                rb.AddForce(currentMovementVector * currentMovementScriptable.AccelerationForce, ForceMode.Acceleration);
+                rb.AddForce(currentMovementVector * playerStats.AccelerationForce, ForceMode.Acceleration);
                 LimitVelocity();
             }
             else
@@ -49,10 +51,15 @@ namespace Player
                 oppositeVelocity.z *= -1f;
                 oppositeVelocity.y = 0f;
 
-                rb.AddForce(oppositeVelocity * currentMovementScriptable.InertiaDamping, ForceMode.Acceleration);
+                rb.AddForce(oppositeVelocity * playerStats.InertiaDamping, ForceMode.Acceleration);
             }
         }
         #endregion
+
+        public void Initialize(PlayerStats playerStats)
+        {
+            this.playerStats = playerStats;
+        }
 
         private void BindInputs()
         {
@@ -91,9 +98,9 @@ namespace Player
 
             float magnitude = flatVelocity.magnitude;
 
-            if (magnitude > currentMovementScriptable.MaxSpeed)
+            if (magnitude > playerStats.MaxSpeed)
             {
-                float ratio = currentMovementScriptable.MaxSpeed / magnitude;
+                float ratio = playerStats.MaxSpeed / magnitude;
 
                 flatVelocity.x *= ratio;
                 flatVelocity.z *= ratio;

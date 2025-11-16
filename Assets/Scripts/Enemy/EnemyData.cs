@@ -31,7 +31,7 @@ namespace Enemy
 
             CurrentName = blueprint.EnemyName;
             CurrentHealth = blueprint.BaseHealth;
-            CurrentSpeed = blueprint.MovementSettings.MaxSpeed;
+            CurrentSpeed = blueprint.MovementSettings.BaseSpeed;
             EnemyType = blueprint.EnemyType;
             PursuitStrategy = blueprint.PursuitStrategy;
             IsAvoiding = false;
@@ -47,7 +47,7 @@ namespace Enemy
 
             CurrentName = blueprint.EnemyName;
             CurrentHealth = blueprint.BaseHealth;
-            CurrentSpeed = blueprint.MovementSettings.MaxSpeed;
+            CurrentSpeed = blueprint.MovementSettings.BaseSpeed;
             EnemyType = blueprint.EnemyType;
             PursuitStrategy = blueprint.PursuitStrategy;
             IsAvoiding = false;

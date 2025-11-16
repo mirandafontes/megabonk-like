@@ -45,7 +45,7 @@ namespace Enemy
                 return;
             }
 
-            MoveEnemies(Time.fixedDeltaTime);
+            UpdateEnemies(Time.fixedDeltaTime);
         }
         #endregion
 
@@ -64,22 +64,6 @@ namespace Enemy
             controller.InitializeData(blueprint, spawnPos, newIndex);
 
             activeControllers.Add(controller);
-        }
-
-        public void HandleDamage(EnemyController controller, float damage)
-        {
-            if (controller == null || controller.IsDataValid == false)
-            {
-                return;
-            }
-
-            EnemyData enemyData = controller.CurrentData;
-            enemyData.CurrentHealth -= damage;
-
-            if (enemyData.CurrentHealth <= 0)
-            {
-                KillAndReturn(controller);
-            }
         }
 
         [ContextMenu("Kill random enemy")]
@@ -133,7 +117,7 @@ namespace Enemy
             activeControllers.RemoveAt(lastIndex);
         }
 
-        private void MoveEnemies(float deltaTime)
+        private void UpdateEnemies(float deltaTime)
         {
             Vector3 playerPos = playerTransform.position;
             int activeCount = activeControllers.Count;
@@ -164,11 +148,18 @@ namespace Enemy
                     continue;
                 }
 
-                EnemyData enemyData = controller.CurrentData;
-                PursuitStrategy pursuit = enemyData.PursuitStrategy != null ? enemyData.PursuitStrategy : fallbackPursuit;
+                if (controller.IsDying)
+                {
+                    KillAndReturn(controller);
+                    nextEnemyIndex++;
+                    continue;
+                }
 
-                MovementResult result = pursuit.GetBehavior().CalculateMovement(
-                    enemyData.Position,
+                IPursuit enemyPursuit = controller.GetPursuit();
+                IPursuit pursuit = enemyPursuit ?? fallbackPursuit.GetBehavior();
+
+                MovementResult result = pursuit.CalculateMovement(
+                    controller.Position,
                     playerPos
                 );
 

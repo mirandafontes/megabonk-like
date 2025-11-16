@@ -6,7 +6,7 @@ namespace ScriptableObjects
     public class MovementSettings : ScriptableObject
     {
         [Range(0f, 100f)]
-        public float MaxSpeed = 5f;
+        public float BaseSpeed = 5f;
         [Range(0f, 100f)]
         public float AccelerationForce = 30f;
         [Range(0f, 100f)]

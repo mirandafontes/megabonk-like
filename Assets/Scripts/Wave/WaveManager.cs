@@ -68,7 +68,7 @@ namespace Wave
 
         private IEnumerator WaveCycleCoroutine()
         {
-            while (currentWaveIndex < wavesData.Waves.Count || isGameRunning)
+            while (currentWaveIndex < wavesData.Waves.Count && isGameRunning)
             {
                 WaveSetup currentWave = wavesData.Waves[currentWaveIndex];
 

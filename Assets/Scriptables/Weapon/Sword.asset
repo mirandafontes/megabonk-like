@@ -18,7 +18,7 @@ MonoBehaviour:
   BaseDamage: 10
   BaseCooldown: 1.5
   BaseAmount: 1
-  MaxLevel: 5
+  MaxLevel: 20
   AutoAttack: 0
   DamageCurve:
     serializedVersion: 2

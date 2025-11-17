@@ -84,7 +84,9 @@ namespace UI
         //Está triste isso...
         private void ApplyItem()
         {
+            canvasGroup.SetGroupState(false);
             playerItems.ApplyItem(itemBlueprint);
+            RefreshUI();
         }
 
         public void RefreshUI()

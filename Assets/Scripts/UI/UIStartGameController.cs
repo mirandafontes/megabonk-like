@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Util;
+using Event;
 
 namespace UI
 {
@@ -19,6 +20,7 @@ namespace UI
 
         private void StartGame()
         {
+            EventBus.Publish(new OnGameStart());
             canvasGroup.SetGroupState(false);
         }
     }

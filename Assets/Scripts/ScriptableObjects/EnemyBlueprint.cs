@@ -19,6 +19,6 @@ namespace ScriptableObjects
         public float BaseHealth = 10.0f;
         [Range(1f, 10f)]
         public float BaseDamage = 1.0f;
-        
+        public int ExpOnDeath = 10;
     }
 }

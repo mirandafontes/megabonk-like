@@ -24,6 +24,7 @@ namespace Enemy
         public bool IsDying { get; set; }
         public PursuitStrategy PursuitStrategy { get; set; }
         public bool IsKnockingBack { get; set; }
+        public int Experience {get; set;}
 
         public EnemyData(EnemyBlueprint newBlueprint, Vector3 spawnPosition)
         {
@@ -34,6 +35,7 @@ namespace Enemy
             CurrentSpeed = blueprint.MovementSettings.BaseSpeed;
             EnemyType = blueprint.EnemyType;
             PursuitStrategy = blueprint.PursuitStrategy;
+            Experience = blueprint.ExpOnDeath;
             IsAvoiding = false;
             IsDying = false;
             IsKnockingBack = false;
@@ -50,6 +52,7 @@ namespace Enemy
             CurrentSpeed = blueprint.MovementSettings.BaseSpeed;
             EnemyType = blueprint.EnemyType;
             PursuitStrategy = blueprint.PursuitStrategy;
+            Experience = blueprint.ExpOnDeath;
             IsAvoiding = false;
             IsDying = false;
             IsKnockingBack = false;

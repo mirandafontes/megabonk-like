@@ -1,6 +1,7 @@
 using UnityEngine;
 using ScriptableObjects;
 using Damageable;
+using Event;
 
 namespace Player
 {
@@ -42,6 +43,13 @@ namespace Player
             playerMovement.Initialize(playerStats);
             healthComponent.Initialize(OnHit, OnDeath);
             healthComponent.SetHealth(playerStats.CurrentHealth, playerStats.MaxHealth);
+
+            SubscribeOnEnemyDeath();
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeOnEnemyDeath();
         }
         #endregion
 
@@ -53,18 +61,40 @@ namespace Player
         private void OnLevelUp(int nextLevel)
         {
             Debug.Log($"[PlayerController] Level Up!. New Level: {nextLevel} ");
+            EventBus.Publish(new OnPlayerLevelUp());
         }
 
         private void OnHit(float damage)
         {
             playerStats.CurrentHealth -= damage;
             healthComponent.CurrentHealth = playerStats.CurrentHealth;
+
+            EventBus.Publish(new OnPlayerHit());
         }
 
         private void OnDeath()
         {
             Debug.Log($"[PlayerController] Player is no more.");
             gameObject.SetActive(false);
+
+            EventBus.Publish(new OnPlayerDeath());
+        }
+
+        private void SubscribeOnEnemyDeath()
+        {
+            EventBus.Subscribe<OnEnemyDeathEvent>(OnEnemyDeath);
+        }
+        private void UnsubscribeOnEnemyDeath()
+        {
+            EventBus.Unsubscribe<OnEnemyDeathEvent>(OnEnemyDeath);
+        }
+
+        private void OnEnemyDeath(OnEnemyDeathEvent data)
+        {
+            Debug.Log($"[PlayerController] Receive {data.TotalExperience} experience from {data.TotalEnemiesKilled} enemies");
+
+            playerStats.AddExperience(data.TotalExperience);
+            EventBus.Publish(new OnPlayerAcquireExp());
         }
     }
 }

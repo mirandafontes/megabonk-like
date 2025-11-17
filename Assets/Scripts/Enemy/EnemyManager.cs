@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Event;
 using GenericPool;
 using Pursuit;
 using ScriptableObjects;
@@ -9,6 +10,7 @@ namespace Enemy
     public class EnemyManager : MonoBehaviour
     {
         private readonly List<EnemyController> activeControllers = new List<EnemyController>();
+        private readonly List<EnemyController> toRemove = new List<EnemyController>(50);
         private MonoBehaviourPool<EnemyController> enemyPool;
 
         [Header("- Pool -")]
@@ -123,10 +125,12 @@ namespace Enemy
             int activeCount = activeControllers.Count;
             int enemiesToProcess = Mathf.Min(enemiesPerFrame, activeCount);
 
-            if (nextEnemyIndex >= activeCount)
+            if (nextEnemyIndex >= activeControllers.Count)
             {
                 nextEnemyIndex = 0;
             }
+
+            toRemove.Clear();
 
             //Atualizamos apenas parte dos inimigos em determinado frame
             //Para dividir a atualização de movimentação ao longo de diversos frames
@@ -150,7 +154,7 @@ namespace Enemy
 
                 if (controller.IsDying)
                 {
-                    KillAndReturn(controller);
+                    toRemove.Add(controller);
                     nextEnemyIndex++;
                     continue;
                 }
@@ -165,6 +169,24 @@ namespace Enemy
 
                 controller.ApplyMovement(result.FinalDirection, result.IsAvoidingObstacle, deltaTime);
                 nextEnemyIndex++;
+            }
+
+            if (toRemove.Count > 0)
+            {
+                int totalExp = 0;
+                int totalCount = toRemove.Count;
+
+                for (int i = 0; i < toRemove.Count; i++)
+                {
+                    totalExp += toRemove[i].Experience;
+                    KillAndReturn(toRemove[i]);
+                }
+                
+                EventBus.Publish(new OnEnemyDeathEvent
+                {
+                    TotalExperience = totalExp,
+                    TotalEnemiesKilled = totalCount,
+                });
             }
         }
 

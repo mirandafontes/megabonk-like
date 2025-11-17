@@ -51,7 +51,6 @@ namespace Pursuit
                     Vector3 combinedForce = finalDirection + separationForce * separationWeight;
                     finalDirection = combinedForce.normalized;
 
-                    // Marca como evitando se a separação estiver ativa (ou se o Raycast já fez isso)
                     isAvoiding = true;
                 }
             }

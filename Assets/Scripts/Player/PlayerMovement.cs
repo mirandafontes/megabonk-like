@@ -1,14 +1,21 @@
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Weaponry;
 
 namespace Player
 {
     public class PlayerMovement : MonoBehaviour
     {
         [Header("- Dependencies -")]
+        //Para debug
         [SerializeField] private PlayerStats playerStats;
         [SerializeField] private PlayerInput playerInput;
+
+        [Header("- Weapons -")]
+        [SerializeField] private PlayerWeapon playerWeapon;
+        [SerializeField] private WeaponBlueprint swordBlueprint;
+        [SerializeField] private WeaponBlueprint bowBlueprint;
 
         [Header("- Components -")]
         [SerializeField] private Rigidbody rb;
@@ -22,6 +29,7 @@ namespace Player
         #region Unity
         private void Awake()
         {
+            EquipeWeapons();
             SetupRigidbody();
             BindInputs();
         }
@@ -107,6 +115,17 @@ namespace Player
 
                 rb.linearVelocity = new Vector3(flatVelocity.x, rb.linearVelocity.y, flatVelocity.z);
             }
+        }
+
+        private void EquipeWeapons()
+        {
+            //Infelizmente, as armas estão de maneira estática
+            //Gostaria que fosse de outra maneira, mas estou sem tempo ;3;
+            WeaponData sword = new WeaponData(swordBlueprint);
+            WeaponData bow = new WeaponData(bowBlueprint);
+
+            playerWeapon.EquipWeapon(sword);
+            playerWeapon.EquipWeapon(bow);
         }
     }
 }

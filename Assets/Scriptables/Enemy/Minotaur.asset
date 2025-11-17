@@ -17,4 +17,5 @@ MonoBehaviour:
   MovementSettings: {fileID: 11400000, guid: 7c2f04bebb359654e83c0a4e9cbca61d, type: 2}
   PursuitStrategy: {fileID: 11400000, guid: f4d1cc9391b42474b942498126e33bec, type: 2}
   BaseHealth: 20
-  BaseDamage: 5
+  BaseDamage: 2
+  ExpOnDeath: 18

@@ -16,7 +16,6 @@ namespace Enemy
     public class EnemyController : MonoBehaviour, IPoolable
     {
         [Header("- Components -")]
-        [SerializeField] private Rigidbody rb;
         [SerializeField] private HealthComponent healthComponent;
 
         [Header("- Visual -")]
@@ -73,6 +72,19 @@ namespace Enemy
                 }
 
                 return CurrentData.IsDying;
+            }
+        }
+
+        public int Experience
+        {
+            get
+            {
+                if (CurrentData == null)
+                {
+                    return 0;
+                }
+
+                return CurrentData.Experience;
             }
         }
 
@@ -206,6 +218,7 @@ namespace Enemy
             float timer = 0f;
             Vector3 startPosition = transform.position;
             Vector3 targetPosition = startPosition + direction * force;
+            targetPosition.y = startPosition.y;
             float knockbackDuration = 0.15f;
 
             // O movimento será rápido e baseado em Tempo

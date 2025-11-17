@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 04e657756a000f24c86534045266e98e, type: 3}
-  m_Name: Slash attack
+  m_Name: Bow attack
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.SlashAttackScriptable
   splashAttack:
-    Range: 1
-    AttackAngle: 90
+    Range: 5
+    AttackAngle: 360
     EnemyLayer:
       serializedVersion: 2
       m_Bits: 128

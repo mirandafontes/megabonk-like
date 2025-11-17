@@ -18,3 +18,4 @@ MonoBehaviour:
   PursuitStrategy: {fileID: 11400000, guid: f4d1cc9391b42474b942498126e33bec, type: 2}
   BaseHealth: 5
   BaseDamage: 5
+  ExpOnDeath: 11

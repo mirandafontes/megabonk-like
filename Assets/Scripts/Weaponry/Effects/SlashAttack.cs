@@ -6,7 +6,7 @@ namespace Weaponry.Effect
     [System.Serializable]
     public class SlashAttack : IWeaponEffect
     {
-        private readonly Collider[] hitResults = new Collider[5];
+        private static readonly Collider[] hitResults = new Collider[50];
         public float Range = 1f;
         public float AttackAngle = 45f;
         public LayerMask EnemyLayer;
@@ -16,7 +16,7 @@ namespace Weaponry.Effect
             int numHits = Physics.OverlapSphereNonAlloc(origin, Range, hitResults, EnemyLayer);
             Vector3 forward = direction * Vector3.forward;
 
-            for (int i = 0; i < numHits && i < hitResults.Length; i++)
+            for (int i = 0; i < numHits && i < hitResults.Length && i < data.CurrentAmount; i++)
             {
                 Collider hit = hitResults[i];
 

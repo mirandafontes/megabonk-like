@@ -45,7 +45,6 @@ GameObject:
   - component: {fileID: 6771949663031989057}
   - component: {fileID: 4104017504873925289}
   - component: {fileID: 3669635161755183035}
-  - component: {fileID: 3813908345770317528}
   m_Layer: 7
   m_Name: '[Harpy] Mesh'
   m_TagString: Enemy
@@ -124,27 +123,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &3813908345770317528
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3943868461264564282}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5298039872062006605
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,7 +134,6 @@ GameObject:
   - component: {fileID: 806359151620767747}
   - component: {fileID: 3717991864122415125}
   - component: {fileID: 6875284622544176345}
-  - component: {fileID: 878318424677533655}
   m_Layer: 7
   m_Name: '[Minotaur] Mesh'
   m_TagString: Enemy
@@ -235,27 +212,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &878318424677533655
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5298039872062006605}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6772469266684254534
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,8 +222,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6492005797502557551}
   - component: {fileID: 6307783361451569426}
-  - component: {fileID: 582214087340885288}
   - component: {fileID: 1858725323131353793}
+  - component: {fileID: 6005044920906889596}
+  - component: {fileID: 8857174834181593631}
   m_Layer: 7
   m_Name: '[EnemyController] Enemy'
   m_TagString: Enemy
@@ -303,7 +260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9091084b67c5dfd498729424fa6f5a1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy.EnemyController
-  rb: {fileID: 582214087340885288}
   healthComponent: {fileID: 1858725323131353793}
   enemyVisuals:
   - Type: 0
@@ -314,7 +270,42 @@ MonoBehaviour:
     VisualRoot: {fileID: 3943868461264564282}
   CurrentData:
     blueprint: {fileID: 0}
---- !u!54 &582214087340885288
+--- !u!114 &1858725323131353793
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6772469266684254534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a644fa39dd37b974597a18c1a7d7e8ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Damageable.HealthComponent
+  maxHealth: 100
+  currentHealth: 0
+--- !u!65 &6005044920906889596
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6772469266684254534}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2, y: 2, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &8857174834181593631
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -339,22 +330,8 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &1858725323131353793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6772469266684254534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a644fa39dd37b974597a18c1a7d7e8ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Damageable.HealthComponent
-  maxHealth: 100
-  currentHealth: 0
 --- !u!1 &8357565946494963157
 GameObject:
   m_ObjectHideFlags: 0
@@ -366,7 +343,6 @@ GameObject:
   - component: {fileID: 1084175645803094404}
   - component: {fileID: 6996629717568825659}
   - component: {fileID: 6727075346792144972}
-  - component: {fileID: 5748859747589787080}
   m_Layer: 7
   m_Name: '[Skeleton] Mesh'
   m_TagString: Enemy
@@ -445,24 +421,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5748859747589787080
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8357565946494963157}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 1, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}

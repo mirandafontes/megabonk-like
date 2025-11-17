@@ -87,28 +87,6 @@ namespace Player
         public int CurrentLevel => currentLevel;
         public int TotalExperience => totalExperience;
         public bool IsMaxLevel => currentLevel >= experienceBlueprint.GetLastPoint().Item1;
-        public int CurrentLevelExperience
-        {
-            get
-            {
-                int requiredForCurrent = GetRequiredTotalExperienceFor(CurrentLevel);
-                return totalExperience - requiredForCurrent;
-            }
-        }
-
-        public int ExperienceToNextLevel
-        {
-            get
-            {
-                if (IsMaxLevel)
-                {
-                    return 0;
-                }
-
-                int requiredForNext = GetRequiredTotalExperienceFor(CurrentLevel + 1);
-                return requiredForNext - TotalExperience;
-            }
-        }
 
         // -- Experience -- //
 
@@ -213,6 +191,7 @@ namespace Player
         {
             if (amount <= 0 || IsMaxLevel)
             {
+                Debug.Log("[PlayerStats] Player reached max level");
                 return;
             }
 
@@ -239,6 +218,31 @@ namespace Player
             float levelIndex = Mathf.Clamp(targetLevel, 1, experienceBlueprint.GetLastPoint().Item1);
 
             return Mathf.RoundToInt(experienceBlueprint.GetValueAtLevel(levelIndex));
+        }
+
+        /// <summary>
+        /// Obtém a razão, do (total de exp acumulada - exp mínima do nível atual) / (exp para próximo nível)
+        /// </summary>
+        /// <returns></returns>
+        public float GetCurrentLevelProgress()
+        {
+            if (IsMaxLevel)
+            {
+                return 1f;
+            }
+
+            int requiredForCurrentLevelBase = GetRequiredTotalExperienceFor(CurrentLevel);
+            int requiredForNextLevelTotal = GetRequiredTotalExperienceFor(CurrentLevel + 1);
+            int experienceGainedInCurrentLevel = TotalExperience - requiredForCurrentLevelBase;
+            int requiredExpDelta = requiredForNextLevelTotal - requiredForCurrentLevelBase;
+
+            if (requiredExpDelta <= 0)
+            {
+                return 1f;
+            }
+
+            float progress = (float)experienceGainedInCurrentLevel / requiredExpDelta;
+            return Mathf.Clamp01(progress);
         }
 
         /// <summary>

@@ -250,3 +250,54 @@ os scripts se comuniquem pelo barramennto.
 Implementei o básico de uma HUD e algumas UI's
 Fiz o EventBus com uma struct para comunicação de eventos entre scripts sem um acomplamento direto
 Corrigi alguns bugs menores e adicionei umas API's que estavam faltando.
+
+17/11/2025 (manhã)
+
+Simplifiquei mais sistemas devido ao tempo.
+Fiz a tela de GameOver e fiz uns bindings de alguns eventos
+para terminar o jogo.
+
+O GameOver infelizmente está dando um reload na scene, e não fazendo um soft-reboot nos sistemas
+(o que é possível na infra-estrutura atual).
+
+Dado o tempo e a quantidade de tarefas alheias que tenho na semana, infelizmente não serei
+capaz de concluir o projeto com os feedbacks e gráficos adequados.
+Ele está em torno de 90% concluído, faltando basicamente uns feedbacks e alguns polimentos no geral.
+Os sistemas estão em sua totalidade, concluídos.
+
+
+Na estrutura que criei, consigo instanciar 500 inimigos e atualizar 250 por FixedUpdate.
+Para garantir 60FPS, o frame tem que ter no máximo 16.67ms (1/60).
+
+Vamos as contas: atualizando 250 inimigos por frame fixed update, com 500 inimigos ao mesmo tempo, e considerando a taxa padrão da Unity de 20ms.
+Ou seja, a Unity tenta executar o FixedUpdate 50 vezes por segundo.
+(a taxa de atualização do FixedUpdate no projeto foi aumentada)
+
+Temos (estimativa): 500/250 = 2 frames do FixedUpdate para atualizar tudo.
+2 frames * 20 ms = 40ms para atualizar todos os inimigos.
+1 / 0.040 = 25 vezes um inimigo é atualizado por segundo.
+
+A taxa padrão de atualização da física no Unity (20ms) é tratada como um "orçamento" para uso.
+Ou seja, atualizar os inimigos deve levar, no máximo, 20ms. Qualquer coisa além disso, o desempenho começa a degradar.
+
+Ao observar no profiler (ryzen 7 2700x + RX 6700XT), temos os picos do
+fixed update levando 13.54ms.
+
+Ao verificar o tempo total de render da main thread, para um frame, observamos que
+o PlayerLoop está com 16,81ms, indicando que está com cerca de 59.49FPS.
+
+Ou seja, estamos dentro do orçamento proposto para uma situação muito extrema.
+Utilizando o dobro de inimigos do teste (500 no total), e atualizando todos em 2 frames, temos uma média de 60FPS.
+
+
+Alguns mais testes simples me fizeram também identificar um gargalo no algortimo de Pursuit.
+Fiz otimizações no SimplePursuit, buscando evitar uma situação de gargalo onde os inimigos acabam se empilhando ao redor do player.
+Fiz o CalculateSeparation para evitar esse empilhamento, mas acredito que é negligenciável em jogos assim, devido a qtd de inimigos,
+e também um short-cut, caso o inimigo esteja muito próximo do jogador, para interromper o movimento.
+
+Infelizmente, não tenho mais tempo hábil para implementar de maneira adequada um sistema de items completos.
+O sistema, core em si, é extremamente maleável e expansível.
+Entretanto, as pontes MonoBehaviour não são.
+Fiz de uma maneira simplificada e hard-coded devido ao tempo.
+
+Devo produzir um readme agora pelo resto do dia, explicando todo o processo.

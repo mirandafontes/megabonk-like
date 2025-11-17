@@ -9,7 +9,15 @@ namespace ScriptableObjects
         public Sprite ItemIcon;
         public string ItemName;
         public string ItemDescription;
+        public ModifierType ItemType;
 
         public abstract IItemModifier GetItemModifier();
+
+
+        public enum ModifierType
+        {
+            Speed,
+            Health,
+        }
     }
 }

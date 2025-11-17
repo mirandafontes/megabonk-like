@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19919a90c2275344fae8dd007f6598e1, type: 3}
+  m_Name: Hermes
+  m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.Items.HermesItemScriptable
+  ItemIcon: {fileID: 0}
+  ItemName: Hermes Shoes
+  ItemDescription: Increase player's movement speed by 10%.
+  hermesSpeed:
+    modifierValue: 0.1

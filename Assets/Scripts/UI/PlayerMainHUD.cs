@@ -63,8 +63,8 @@ namespace UI
             //Player
             EventBus.Unsubscribe<OnPlayerHit>(_ => RefreshStats());
             EventBus.Unsubscribe<OnPlayerDeath>(_ => RefreshStats());
-            EventBus.Subscribe<OnPlayerAcquireExp>(_ => RefreshStats());
-            EventBus.Subscribe<OnPlayerLevelUp>(_ => RefreshStats());
+            EventBus.Unsubscribe<OnPlayerAcquireExp>(_ => RefreshStats());
+            EventBus.Unsubscribe<OnPlayerLevelUp>(_ => RefreshStats());
         }
         #endregion
 

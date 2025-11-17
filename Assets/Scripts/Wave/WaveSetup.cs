@@ -49,7 +49,7 @@ namespace Wave
         [Range(1, 500)]
         public int MaxEnemyCount = 10;
 
-        [Range(01f, 10f)]
+        [Range(0.05f, 10f)]
         public float SpawnDelay = 0.1f;
 
         [Tooltip("Curva normalizada para spawn do inimigo.")]

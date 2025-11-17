@@ -83,6 +83,26 @@ namespace Enemy
             KillAndReturn(controllerToKill);
         }
 
+        public void KillAllEnemies()
+        {
+            if (activeControllers.Count == 0)
+            {
+                Debug.Log("[EnemyManager] No active enemies to kill for Game Over.");
+                return;
+            }
+
+            for (int i = 0; i < activeControllers.Count; i++)
+            {
+                EnemyController controller = activeControllers[i];
+                enemyPool.ReturnToPool(controller);
+            }
+
+            activeControllers.Clear();
+            nextEnemyIndex = 0;
+
+            Debug.Log("[EnemyManager] All active enemies killed and returned to pool.");
+        }
+
         public int GetActiveEnemyCount()
         {
             return activeControllers?.Count ?? 0;
@@ -164,7 +184,8 @@ namespace Enemy
 
                 MovementResult result = pursuit.CalculateMovement(
                     controller.Position,
-                    playerPos
+                    playerPos,
+                    deltaTime
                 );
 
                 controller.ApplyMovement(result.FinalDirection, result.IsAvoidingObstacle, deltaTime);
@@ -181,7 +202,7 @@ namespace Enemy
                     totalExp += toRemove[i].Experience;
                     KillAndReturn(toRemove[i]);
                 }
-                
+
                 EventBus.Publish(new OnEnemyDeathEvent
                 {
                     TotalExperience = totalExp,

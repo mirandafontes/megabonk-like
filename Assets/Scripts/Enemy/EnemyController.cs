@@ -94,6 +94,7 @@ namespace Enemy
         private void Awake()
         {
             healthComponent.Initialize(OnHit, OnDeath);
+            
         }
         #endregion
 

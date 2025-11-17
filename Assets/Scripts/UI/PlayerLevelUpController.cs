@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Util;
 using Weaponry;
 using Event;
+using System;
 
 namespace UI
 {
@@ -20,7 +21,7 @@ namespace UI
         [SerializeField] private CanvasGroup canvasGroup;
 
         [Header("- Dependencies -")]
-        [SerializeField] private PlayerController playerController;
+        [SerializeField] private PlayerItems playerItems;
         [SerializeField] private PlayerWeapon playerWeapon;
 
         [Header("- Weapon 1 -")]
@@ -54,6 +55,7 @@ namespace UI
         {
             weaponOneButtonLevelUp.onClick.AddListener(() => LevelUpWeapon(swordBlueprint));
             weaponTwoButtonLevelUp.onClick.AddListener(() => LevelUpWeapon(bowBlueprint));
+            selectItem.onClick.AddListener(() => ApplyItem());
 
             EventBus.Subscribe<OnPlayerLevelUp>(OnPlayerLevelUp);
 
@@ -77,6 +79,12 @@ namespace UI
             playerWeapon.LevelUpWeapon(weapon);
             canvasGroup.SetGroupState(false);
             RefreshUI();
+        }
+
+        //Está triste isso...
+        private void ApplyItem()
+        {
+            playerItems.ApplyItem(itemBlueprint);
         }
 
         public void RefreshUI()
@@ -147,7 +155,6 @@ namespace UI
 
         private void PopulateItemOption(ItemBlueprint blueprint, Image icon, TextMeshProUGUI title, TextMeshProUGUI description)
         {
-
             title.text = blueprint.ItemName;
             icon.sprite = blueprint.ItemIcon;
 

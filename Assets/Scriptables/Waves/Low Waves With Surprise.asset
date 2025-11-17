@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 206009e7e0c4e8f4c9bd8166d67f7d05, type: 3}
-  m_Name: Low Waves
+  m_Name: Low Waves With Surprise
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.WavesScriptable
   Waves:
   - Groups:
@@ -109,14 +109,14 @@ MonoBehaviour:
         m_PreInfinity: 1
         m_PostInfinity: 1
         m_RotationOrder: 4
-    CooldownTime: 1
+    CooldownTime: 10
     InitalTimeBeforeSpawn: 2
     MaxEnemies: 10
     TotalTime: 50
   - Groups:
     - WhichEnemy: 0
-      MaxEnemyCount: 20
-      SpawnDelay: 0
+      MaxEnemyCount: 250
+      SpawnDelay: 0.05
       SpawnOverTime:
         serializedVersion: 2
         m_Curve:
@@ -159,7 +159,7 @@ MonoBehaviour:
         m_PreInfinity: 1
         m_PostInfinity: 1
         m_RotationOrder: 4
-    CooldownTime: 1
+    CooldownTime: 10
     InitalTimeBeforeSpawn: 2
-    MaxEnemies: 10
+    MaxEnemies: 250
     TotalTime: 50

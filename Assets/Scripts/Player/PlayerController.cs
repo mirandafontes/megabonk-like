@@ -58,6 +58,14 @@ namespace Player
             return playerStats;
         }
 
+        [ContextMenu("Up player level")]
+        private void NextLevel()
+        {
+            int nextLevel = playerStats.CurrentLevel + 1;
+            Debug.Log($"[PlayerController] Level Up!. New Level: {nextLevel} ");
+            EventBus.Publish(new OnPlayerLevelUp());
+        }
+
         private void OnLevelUp(int nextLevel)
         {
             Debug.Log($"[PlayerController] Level Up!. New Level: {nextLevel} ");
@@ -78,6 +86,7 @@ namespace Player
             gameObject.SetActive(false);
 
             EventBus.Publish(new OnPlayerDeath());
+            EventBus.Publish(new OnGameEnd());
         }
 
         private void SubscribeOnEnemyDeath()

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Enemy;
+using Event;
 using ScriptableObjects;
 using Spawn;
 using UnityEngine;
@@ -22,6 +23,7 @@ namespace Wave
         private readonly WaitForSeconds waitOneTenth = new WaitForSeconds(0.1f);
         private List<SpawnGroupTracker> trackers = new List<SpawnGroupTracker>();
         private int activeTrackerCount;
+        private bool isGameRunning = false;
 
         #region Unity
         private void Awake()
@@ -30,25 +32,43 @@ namespace Wave
             //Ou criar um scriptable object.
             //Ou, ainda, estipular o algortimo de spawn para cada tipo de monstro.
             spawnPositionGenerator = new CircleSpawn();
+            isGameRunning = false;
+
+            EventBus.Subscribe<OnGameStart>(_ => StartGame());
+            EventBus.Subscribe<OnGameEnd>(_ => EndGame());
+        }
+
+        private void OnDestroy()
+        {
+            EventBus.Unsubscribe<OnGameStart>(_ => StartGame());
+            EventBus.Unsubscribe<OnGameEnd>(_ => EndGame());
         }
         #endregion
 
         [ContextMenu("Start Game")]
-        public void StartGame()
+        private void StartGame()
         {
             if (wavesData != null && enemyManager != null && spawnPositionGenerator != null)
             {
+                isGameRunning = true;
                 StartCoroutine(WaveCycleCoroutine());
             }
             else
             {
                 Debug.LogError("[WaveManager] WaveManager is not configured correctly. Check all dependencies.");
+                isGameRunning = false;
             }
+        }
+
+        private void EndGame()
+        {
+            isGameRunning = false;
+            enemyManager.KillAllEnemies();
         }
 
         private IEnumerator WaveCycleCoroutine()
         {
-            while (currentWaveIndex < wavesData.Waves.Count)
+            while (currentWaveIndex < wavesData.Waves.Count || isGameRunning)
             {
                 WaveSetup currentWave = wavesData.Waves[currentWaveIndex];
 
@@ -73,6 +93,8 @@ namespace Wave
             }
 
             Debug.Log("[WaveManager] All Waves Completed. Game Over!");
+            EndGame();
+            EventBus.Publish(new OnGameEnd());
         }
 
         private IEnumerator ManageWaveDuration(WaveSetup setup)
@@ -95,6 +117,24 @@ namespace Wave
             }
 
             trackers.Clear();
+        }
+
+        private void ProcessTrackers(List<SpawnGroupTracker> trackers, WaveSetup setup)
+        {
+            float currentTimeInWave = Time.time - waveStartTime;
+
+            foreach (var tracker in trackers)
+            {
+                if (!tracker.IsActive)
+                {
+                    continue;
+                }
+
+                if (enemyManager.GetActiveEnemyCount() < setup.MaxEnemies)
+                {
+                    AttemptSpawn(tracker, currentTimeInWave, setup.TotalTime);
+                }
+            }
         }
 
         private void AttemptSpawn(SpawnGroupTracker tracker, float currentTimeInWave, int totalWaveTime)
@@ -130,24 +170,6 @@ namespace Wave
 
                 tracker.IncrementSpawn();
                 tracker.NextSpawnTime = Time.time + group.SpawnDelay;
-            }
-        }
-
-        private void ProcessTrackers(List<SpawnGroupTracker> trackers, WaveSetup setup)
-        {
-            float currentTimeInWave = Time.time - waveStartTime;
-
-            foreach (var tracker in trackers)
-            {
-                if (!tracker.IsActive)
-                {
-                    continue;
-                }
-
-                if (enemyManager.GetActiveEnemyCount() < setup.MaxEnemies)
-                {
-                    AttemptSpawn(tracker, currentTimeInWave, setup.TotalTime);
-                }
             }
         }
 

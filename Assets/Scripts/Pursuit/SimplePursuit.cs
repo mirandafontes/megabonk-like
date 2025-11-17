@@ -7,6 +7,7 @@ namespace Pursuit
     {
         [Header("- Pursuit -")]
         [SerializeField] private string playerTag;
+        [SerializeField] private string enemyTag = "Enemy";
         [SerializeField] private float avoidanceCheckDistance = 1.0f;
         [SerializeField] private LayerMask obstacleAvoidanceMask;
 
@@ -14,14 +15,30 @@ namespace Pursuit
         [SerializeField] private float separationRadius = 0.2f;
         [SerializeField] private float separationWeight = 0.25f;
         [SerializeField] private float minSeparationDistance = 0.1f;
-        [SerializeField] private float directionLerpSpeed = 10f; 
+        [SerializeField] private float minStopDistance = 1f;
+        [SerializeField] private float directionLerpSpeed = 10f;
         private Vector3 lastDirection = Vector3.forward;
 
+        private readonly int maxSeparationCount = 5;
         private static readonly Collider[] separationResults = new Collider[5];
 
-        public MovementResult CalculateMovement(Vector3 currentPosition, Vector3 targetPosition)
+        public MovementResult CalculateMovement(Vector3 currentPosition, Vector3 targetPosition, float deltaTime)
         {
-            Vector3 targetDirection = (targetPosition - currentPosition).normalized;
+            float stopDistanceSqr = minStopDistance * minStopDistance;
+            Vector3 toTarget = targetPosition - currentPosition;
+            
+            //Verificar se o inimigo está muito próximo do player
+            //para interromper a perseguição na posição atual
+            if (toTarget.sqrMagnitude < stopDistanceSqr)
+            {
+                return new MovementResult
+                {
+                    FinalDirection = Vector3.zero, 
+                    IsAvoidingObstacle = false
+                };
+            }
+
+            Vector3 targetDirection = toTarget.normalized;
             Vector3 finalDirection = targetDirection;
             bool isAvoiding = false;
 
@@ -58,10 +75,10 @@ namespace Pursuit
             Vector3 targetCombinedDirection = finalDirection.normalized;
 
             finalDirection = Vector3.Lerp(
-                lastDirection, 
-                targetCombinedDirection, 
-                Time.deltaTime * directionLerpSpeed
-            ).normalized; 
+                lastDirection,
+                targetCombinedDirection,
+                deltaTime * directionLerpSpeed
+            ).normalized;
 
             lastDirection = finalDirection;
 
@@ -83,26 +100,29 @@ namespace Pursuit
                 obstacleAvoidanceMask
             );
 
-            for (int i = 0; i < numHits && i < separationResults.Length; i++)
+            //maxSeparationCount atua como limitante, para evitar comparações infinitas
+            for (int i = 0; i < numHits && i < maxSeparationCount; i++)
             {
                 Collider other = separationResults[i];
-
-                if (other.transform.position == currentPosition || !other.CompareTag("Enemy"))
+                Vector3 otherPosition = other.transform.position;
+                if (otherPosition == currentPosition || !other.CompareTag(enemyTag))
                 {
-                    separationResults[i] = null;
                     continue;
                 }
 
-                Vector3 awayFromNeighbor = currentPosition - other.transform.position;
-                float distance = awayFromNeighbor.magnitude;
+                Vector3 awayFromNeighbor = currentPosition - otherPosition;
+                float sqrDistance = awayFromNeighbor.sqrMagnitude; 
 
-                if (distance > 0)
+                if (sqrDistance > 0.0001f)
                 {
+                    float distance = Mathf.Sqrt(sqrDistance);
                     float clampedDistance = Mathf.Max(minSeparationDistance, distance);
-                    separationVector += awayFromNeighbor.normalized / clampedDistance;
-                }
 
-                separationResults[i] = null;
+                    // weight = (vetor normalizado) / distância_com_peso
+                    // weight = (awayFromNeighbor / distance) / clampedDistance
+                    // weight = awayFromNeighbor / (distance * clampedDistance)
+                    separationVector += awayFromNeighbor / (distance * clampedDistance);
+                }
             }
 
             return separationVector.normalized;

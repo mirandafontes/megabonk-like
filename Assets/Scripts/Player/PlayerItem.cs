@@ -9,7 +9,13 @@ namespace Player
     public class PlayerItems : MonoBehaviour
     {
         [Header("- Dependencies -")]
+        //Debug apenas
         [SerializeField] private PlayerStats playerStats;
+
+        public void Initialize(PlayerStats stats)
+        {
+            playerStats = stats;
+        }
 
         // Apenas aplica o modificador,
         // mas não gerencia o estado do item (como nível/dados),

@@ -29,7 +29,7 @@ Busco a simplicidade no código em detrimento ao over-engineering.
 Ao contrário do teste técnico anterior, este possui requisitos mais específicos
 e um jogo com temática já presentes.
 
-Inicialmente, defini um cenário qualquer e quis delimitar inicialmente o sistema de movimentação
+Inicialmente, defini um cenário qualquer e quis delimitar o sistema de movimentação
 do jogador.
 
 Utilizei a física do próprio Unity, com rigidbody e um sistema de cinemachine

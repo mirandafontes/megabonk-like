@@ -20,6 +20,7 @@ namespace Player
 
         [Header("- Dependencies -")]
         [SerializeField] private PlayerMovement playerMovement;
+        [SerializeField] private PlayerItems playerItems;
         [SerializeField] private HealthComponent healthComponent;
 
         [Header("- Data -")]
@@ -41,6 +42,7 @@ namespace Player
 
             //Injeção da dependencia a partir da classe orquestradora.
             playerMovement.Initialize(playerStats);
+            playerItems.Initialize(playerStats);
             healthComponent.Initialize(OnHit, OnDeath);
             healthComponent.SetHealth(playerStats.CurrentHealth, playerStats.MaxHealth);
 

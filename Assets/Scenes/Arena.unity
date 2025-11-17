@@ -10690,7 +10690,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.PlayerLevelUpController
   canvasGroup: {fileID: 883408471}
-  playerController: {fileID: 1636561827148066889}
+  playerItems: {fileID: 1636561827148066890}
   playerWeapon: {fileID: 1636561827148066888}
   swordBlueprint: {fileID: 11400000, guid: 50e0be78d3096b84385038305da7fb26, type: 2}
   weaponOneButtonLevelUp: {fileID: 1318725324}
@@ -26215,18 +26215,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6567115646694453608, guid: d70db9e8159384d438ae551ef5416ce0, type: 3}
-      propertyPath: bowBlueprint
-      value: 
-      objectReference: {fileID: 11400000, guid: 05c541bdc4d4c6c49987a0cb617ccef3, type: 2}
-    - target: {fileID: 6567115646694453608, guid: d70db9e8159384d438ae551ef5416ce0, type: 3}
-      propertyPath: playerWeapon
-      value: 
-      objectReference: {fileID: 1636561827148066888}
-    - target: {fileID: 6567115646694453608, guid: d70db9e8159384d438ae551ef5416ce0, type: 3}
-      propertyPath: swordBlueprint
-      value: 
-      objectReference: {fileID: 11400000, guid: 50e0be78d3096b84385038305da7fb26, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26254,6 +26242,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6991497dfbbc94eb4ba3e87e1a9ecc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerController
+--- !u!114 &1636561827148066890 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5310857474331002195, guid: d70db9e8159384d438ae551ef5416ce0, type: 3}
+  m_PrefabInstance: {fileID: 1636561827148066887}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e7022ea7cccbb746a8a2e2e915569e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlayerItems
 --- !u!1001 &2240325153150625185
 PrefabInstance:
   m_ObjectHideFlags: 0

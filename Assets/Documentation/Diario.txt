@@ -235,3 +235,18 @@ Fiz uma adequação na interface, removendo o gameobject de origem da API.
 
 Fiz uma adição do Enemy no LayerMask da Unity, e adicionei como uma das layers para evitar no algortimo de perseguição.
 Com isso, os inimigos também se evitam no algoritmo.
+
+16/11/2025 (manhã)
+
+Fiz algumas correções menores e adequações no EnemyManager, PlayerManager e afins.
+Criei o PlayerWeapon e deixei "hard-coded" as armas do jogador, uma espada e um arco.
+
+Tive que fazer diversas simplificações devido ao tempo e ao atraso do computador quebrado.
+
+Pela noite devo implementar um EventBus para evitar criar mais estruturas, garatindo que
+os scripts se comuniquem pelo barramennto.
+
+(noite)
+Implementei o básico de uma HUD e algumas UI's
+Fiz o EventBus com uma struct para comunicação de eventos entre scripts sem um acomplamento direto
+Corrigi alguns bugs menores e adicionei umas API's que estavam faltando.
